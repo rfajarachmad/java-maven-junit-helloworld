@@ -1,13 +1,18 @@
 package com.example.javamavenjunithelloworld;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 /**
  * Unit test for Hello.
@@ -24,7 +29,7 @@ public class HelloTest {
         Hello hi = new Hello();
         hi.sayHello(stream);
 
-        assertThat(os.toString(), is(equalTo(Hello.HELLO + "\n")));
+        assertThat(os.toString(), is(equalTo(String.format("%s%s", Hello.HELLO, System.lineSeparator()))));
     }
 
     @Test
@@ -37,19 +42,19 @@ public class HelloTest {
         hi.sayHello(stream);
 
         // Does it say "Hello!" three times?
-        String goal = Hello.HELLO + "\n" + Hello.HELLO + "\n" + Hello.HELLO + "\n";
+        String goal = String.format("%1$s%2$s%1$s%2$s%1$s%2$s", Hello.HELLO, System.lineSeparator());
         assertThat(os.toString(), is(equalTo(goal)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testIllegalArgumentForHello21() {
+    @Test
+    public void testIllegalArgumentForHelloTooMuch() {
         Hello hi = new Hello();
-        hi.setTimes(Hello.MAXIMUM_AMOUNT_OF_TIMES + 1);
+        assertThrows(IllegalArgumentException.class, () -> hi.setTimes(Hello.MAXIMUM_AMOUNT_OF_TIMES + 1));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testIllegalArgumentForHelloNegative() {
         Hello hi = new Hello();
-        hi.setTimes(-1);
+        assertThrows(IllegalArgumentException.class, () -> hi.setTimes(-1));
     }
 }
